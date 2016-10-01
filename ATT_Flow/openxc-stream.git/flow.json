@@ -1,0 +1,208 @@
+[
+  {
+    "type": "tab",
+    "id": "828b2334.7d74e",
+    "label": "SendToTestLogger",
+    "debugBreak": false,
+    "debugOutput": false
+  },
+  {
+    "id": "68544f62.97abb",
+    "type": "flow server",
+    "hosted": true,
+    "name": "flow",
+    "flowFile": "flow.json",
+    "configFile": "config.json"
+  },
+  {
+    "id": "d2f80d5.04a757",
+    "type": "http in",
+    "z": "828b2334.7d74e",
+    "name": "",
+    "url": "/Data",
+    "method": "post",
+    "configKey": "",
+    "authType": "noAuth",
+    "useAuth": false,
+    "useOauth": false,
+    "encryption": "none",
+    "realm": "",
+    "site": "",
+    "authorizationPath": "/oauth/authorize",
+    "tokenPath": "/oauth/access_token",
+    "scope": "",
+    "encryptObj": [
+      "username",
+      "password",
+      "clientId",
+      "clientSecret"
+    ],
+    "swaggerDoc": "",
+    "x": 70,
+    "y": 133,
+    "wires": [
+      [
+        "1be9576c.e416a9",
+        "945f2751.6ba0d8",
+        "6d87d8bf.e222e"
+      ]
+    ]
+  },
+  {
+    "id": "eb6bc5f7.149438",
+    "type": "http request",
+    "z": "828b2334.7d74e",
+    "name": "M2X PUT",
+    "method": "PUT",
+    "ret": "obj",
+    "url": "",
+    "configKey": "",
+    "useAuth": false,
+    "encryption": "none",
+    "useCertificate": false,
+    "decrypt": false,
+    "cert": "",
+    "key": "",
+    "encryptObj": [
+      "username",
+      "password"
+    ],
+    "x": 876.84375,
+    "y": 137,
+    "wires": [
+      [
+        "ae72d85a.518d28",
+        "6f4873bb.90b78c"
+      ]
+    ]
+  },
+  {
+    "id": "ae72d85a.518d28",
+    "type": "debug",
+    "z": "828b2334.7d74e",
+    "name": "m2x response",
+    "active": true,
+    "console": "false",
+    "complete": "payload",
+    "x": 962.84375,
+    "y": 68,
+    "wires": [
+
+    ]
+  },
+  {
+    "id": "6f4873bb.90b78c",
+    "type": "http response",
+    "z": "828b2334.7d74e",
+    "name": "",
+    "x": 957.84375,
+    "y": 202,
+    "wires": [
+
+    ]
+  },
+  {
+    "id": "6d87d8bf.e222e",
+    "type": "function",
+    "z": "828b2334.7d74e",
+    "name": "OpenXC Coordinates",
+    "func": "var latitude = null;\nvar longitude = null;\n\nvar keys = Object.keys(msg.payload);\n\nfor(var i =0; i<keys.length;i++)\n{ //result.push(msg.payload[keys[i]].value, msg.payload[keys[i]].name);\n  if (msg.payload[keys[i]].name == 'latitude'){\n      latitude = msg.payload[keys[i]].value;\n  }\n  else if (msg.payload[keys[i]].name == 'longitude'){\n      longitude = msg.payload[keys[i]].value;\n  }\n}\n\nmsg.headers = { // \"X-M2X-KEY\": global.get(\"M2X-Key\")\n    \"X-M2X-KEY\": \"\", \n    \"content-type\": \"application/json\"\n};\ndeviceID = \"\"\n\nmsg.url = \"https://api-m2x.att.com/v2/devices/\";\nmsg.url += deviceID.concat(\"/location\");\n\nif (latitude !== null && longitude !== null){\n    msg.payload = {\"latitude\": latitude, \"longitude\": longitude};\n    return msg;\n} else{\n    return; \n}",
+    "outputs": 1,
+    "noerr": 0,
+    "dependencies": [
+
+    ],
+    "x": 494.53338623046875,
+    "y": 64,
+    "wires": [
+      [
+        "59c60335.ac846c",
+        "eb6bc5f7.149438"
+      ]
+    ]
+  },
+  {
+    "id": "59c60335.ac846c",
+    "type": "debug",
+    "z": "828b2334.7d74e",
+    "name": "Debug Location",
+    "active": true,
+    "console": "true",
+    "complete": "payload",
+    "x": 685.5333251953125,
+    "y": 28,
+    "wires": [
+
+    ]
+  },
+  {
+    "id": "945f2751.6ba0d8",
+    "type": "function",
+    "z": "828b2334.7d74e",
+    "name": "OpenXC Measurements",
+    "func": "var accelerator_pedal_position = null;\nvar vehicle_speed = null; \nvar fuel_level = null;\n\nmsg.headers = {\n    \"X-M2X-KEY\": \"\", \n    \"content-type\": \"application/json\"\n};\ndeviceID = \"\"\n\nmsg.url = \"https://api-m2x.att.com/v2/devices/\";\n\nvar keys = Object.keys(msg.payload);\n\nfor(var i =0; i<keys.length;i++)\n{ //result.push(msg.payload[keys[i]].value, msg.payload[keys[i]].name);\n  if (msg.payload[keys[i]].name == 'accelerator_pedal_position'){ // && msg.payload[keys[i]].value > 30.0\n      try{\n          msg.url += deviceID.concat(\"/streams/accelerator_pedal_position/value\");\n          accelerator_pedal_position = msg.payload[keys[i]].value;\n          msg.payload = {\"value\": accelerator_pedal_position};\n          return msg;\n      }\n      catch(err){\n          return;\n      }\n  }\n  else if (msg.payload[keys[i]].name == 'vehicle_speed'){ // && msg.payload[keys[i]].value > 115.0\n      try{\n          msg.url += deviceID.concat(\"/streams/vehicle_speed/value\");\n          vehicle_speed = msg.payload[keys[i]].value;\n          msg.payload = {\"value\": vehicle_speed};\n          return msg;\n      }\n      catch(err){\n          return;\n      }\n  }\n  else if (msg.payload[keys[i]].name == 'fuel_level'){\n      fuel_level = msg.payload[keys[i]].value;\n      \n      try{\n          var fuel_old = global.get(\"fuel_level_old\");\n      }\n      catch(err){\n          global.set(\"fuel_level_old\",fuel_level);\n      }\n      finally{\n          if (fuel_level !== null && fuel_level < fuel_old){\n              msg.url += deviceID.concat(\"/streams/fuel_level/value\");\n              msg.payload = {\"value\": fuel_level};\n              global.set(\"fuel_level_old\",fuel_level);\n              return msg;\n          } \n          else{\n              return;\n          }\n      }\n  }  // next try fuel economy, maybe that will be the final measurement\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "dependencies": [
+
+    ],
+    "x": 346.8125,
+    "y": 133,
+    "wires": [
+      [
+        "b7866191.4879a",
+        "eb6bc5f7.149438"
+      ]
+    ]
+  },
+  {
+    "id": "b7866191.4879a",
+    "type": "debug",
+    "debugOutput": true,
+    "z": "828b2334.7d74e",
+    "name": "Debug OpenXC Measurements",
+    "active": true,
+    "console": "true",
+    "complete": "payload",
+    "x": 569.8125,
+    "y": 170,
+    "wires": [
+
+    ]
+  },
+  {
+    "id": "1be9576c.e416a9",
+    "type": "function",
+    "z": "828b2334.7d74e",
+    "name": "OpenXC Fuel Economy Calculation",
+    "func": "var fuel_consumed_since_restart = null;\nvar odometer = null;\nvar fuel_economy = null;\n\nmsg.headers = { // \"X-M2X-KEY\": global.get(\"M2X-Key\")\n    \"X-M2X-KEY\": \"\", \n    \"content-type\": \"application/json\"\n};\ndeviceID = \"\"\n    \nvar keys = Object.keys(msg.payload);\n\nfor(var i =0; i<keys.length;i++)\n{\n  if (msg.payload[keys[i]].name == 'fuel_consumed_since_restart'){\n      fuel_consumed_since_restart = msg.payload[keys[i]].value;\n  }\n  else if (msg.payload[keys[i]].name == 'odometer'){\n      odometer = msg.payload[keys[i]].value; \n  }\n}\n\n// Set old and new values\ntry{\n    var fuel_old = global.get(\"fuel_consumed_since_restart_old\");\n    if (fuel_consumed_since_restart > fuel_old){\n        global.set(\"fuel_consumed_since_restart_new\", fuel_consumed_since_restart);\n    }\n}\ncatch(err){\n    if (fuel_consumed_since_restart !== null){\n        global.set(\"fuel_consumed_since_restart_old\", fuel_consumed_since_restart);\n    }\n    return;\n}\ntry{\n    var km_old = global.get(\"odometer_old\");\n    if (odometer > km_old){\n        global.set(\"odometer_new\", odometer);\n    }\n}\ncatch(err){\n    if (odometer !== null){\n        global.set(\"odometer_old\", odometer)\n    }\n    return;\n}\n\n// Calculate fuel economy = (fuel_new - fuel_old) / ((km_new - km_old)*100)\ntry{\n    var fuel_old = global.get(\"fuel_consumed_since_restart_old\");\n    var fuel_new = global.get(\"fuel_consumed_since_restart_new\");\n    var km_old = global.get(\"odometer_old\");\n    var km_new = global.get(\"odometer_new\");\n    \n    fuel_economy = ((fuel_consumed_since_restart - fuel_old) / (odometer - km_old))*100;\n    msg.url = \"https://api-m2x.att.com/v2/devices/\";\n    msg.url += deviceID.concat(\"/streams/fuel_economy/value\");\n    msg.payload = {\"value\": fuel_economy};\n    \n    global.set(\"fuel_consumed_since_restart_old\", fuel_consumed_since_restart);\n    global.set(\"odometer_old\", odometer);\n    \n    return msg;\n}\ncatch(err){\n    return;\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "dependencies": [
+
+    ],
+    "x": 533.0625,
+    "y": 245,
+    "wires": [
+      [
+        "12a21d8f.ed5de2",
+        "eb6bc5f7.149438"
+      ]
+    ]
+  },
+  {
+    "id": "12a21d8f.ed5de2",
+    "type": "debug",
+    "debugOutput": true,
+    "z": "828b2334.7d74e",
+    "name": "Debug OpenXC Fuel Economy Calculation",
+    "active": true,
+    "console": "true",
+    "complete": "payload",
+    "x": 827.0625,
+    "y": 289,
+    "wires": [
+
+    ]
+  }
+]

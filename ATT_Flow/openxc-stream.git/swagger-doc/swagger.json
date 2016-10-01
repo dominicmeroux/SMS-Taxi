@@ -1,0 +1,20 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "My Flow API",
+    "version": "0.0.1"
+  },
+  "basePath": "/",
+  "paths": {
+    "/Data": {
+      "post": {
+        "summary": "post /Data",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  }
+}
