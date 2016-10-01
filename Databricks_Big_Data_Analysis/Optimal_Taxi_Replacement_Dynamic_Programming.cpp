@@ -1,8 +1,19 @@
+// 
+// DESCRIPTION: 
+// 
+// This program accepts user inputs on a specific vehicle and applies a dynamic programming
+// "Machine Replacement Problem" approach. This program is still in development, but the concept
+// is that OpenXC data insights obtained in the Databricks big data analysis could be used here
+// by fleet management to determine the optimal age to replace a taxi, so that taxis are not kept 
+// in service longer than is optimal. 
+//
 //  Copyright © 2016 Dominique Meroux. All rights reserved.
-// Assu
+//
 /////////////////////////////////////////////////////////////////////
-// Maybe have outer for loop iterate over all vehicles in fleet analyzed form PySpark or R
-// and output DP result for each
+// IMPROVEMENTS FOR PRODUCTION VERSION: 
+// 1) Modify cost values
+// 2) Add an outer to loop iterate over all vehicles in fleet
+// 3) Automate output DP report
 //
 //
 /////////////////////////////////////////////////////////////////////
@@ -15,9 +26,9 @@ using namespace std;
 
 /////////////////////////////////////////////////////////////////////
 // Declare variables
-int PlanningHorizon; // planning Horizon
-int MY;              // current model year
-int Current_Age;     // current age (calculated)
+int PlanningHorizon;   // planning Horizon
+int MY;                // current model year
+int Current_Age;       // current age (calculated)
 float Purchase_Price;  // purchase price
 float Annual_Mileage;  // annual mileage (estimate)
 float Current_FE;      // current vehicle's fuel economy (estimate)
