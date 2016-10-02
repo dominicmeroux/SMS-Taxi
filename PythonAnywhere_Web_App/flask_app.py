@@ -15,9 +15,9 @@ from m2x.client import M2XClient
 import sqlite3
 import re
 
-gDistance = googlemaps.Client(key='')
-gPlaces = googlemaps.Client(key='')
-gDirections = googlemaps.Client(key='')
+gDistance = googlemaps.Client(key='AIzaSyCew8S9un1VlpuV1M1_9iJrllMTX_G_yR0')
+gPlaces = googlemaps.Client(key='AIzaSyCew8S9un1VlpuV1M1_9iJrllMTX_G_yR0')
+gDirections = googlemaps.Client(key='AIzaSyCew8S9un1VlpuV1M1_9iJrllMTX_G_yR0')
 
 
 app = Flask(__name__)
@@ -138,7 +138,7 @@ def inbound_sms():
     # If SMS is a ride request
     ###########################################################
     # Extract Location, Destination, and Seating Requested and perform action
-    else: 
+    else:
         try:
             M = inbound_message.split(';')
             Location = M[0]
@@ -150,7 +150,7 @@ def inbound_sms():
                 Gender = 1
             else:
                 response.message("Please re-send gender value as M or F. Gender found was" + str(M[3]))
-            
+
             ###########################################################
             ########################################################### Stage 1: Determine potential matches
             ###########################################################
@@ -158,7 +158,7 @@ def inbound_sms():
             conn = sqlite3.connect('passenger.db')
             c = conn.cursor()
             try:
-                KEY = ''
+                KEY = 'bf11bf82cedff6e0d7ec93f3e9db6b9a'
                 client = M2XClient(KEY)
                 devices = client.devices()
                 json = client.last_response.json
@@ -210,12 +210,11 @@ def inbound_sms():
                     PassCapacity = c.fetchall()
                 except:
                     response.message("db vehicle seats query not working")
-                try:
-                    if (((float(Pickup_Duration[i]) / 60) < 15) and (Seating + Seating_Requested < PassCapacity[0][0])):
-                        # Append the index for the vehicle in Current_Status
-                        J.append(i)
-                except:
-                    response.message(str(i))
+                if (((float(Pickup_Duration[i]) / 60) < 15) and (Seating + Seating_Requested < PassCapacity[0][0])):
+                    # Append the index for the vehicle in Current_Status
+                    J.append(i)
+                #except:
+                #    response.message(str(i))
 
             # If no vehicles met the requirement for proximity to pickup location
             if len(J) == 0:
@@ -298,55 +297,50 @@ def inbound_sms():
                     # If there are existing passengers
                     if (len(Stops) != 0):
 
-                        try:
-                            # Get directions with initial configuration
-                            directions_result = gDirections.directions(
-
-                                # Origin is the current location of the taxi
-                                Locations[i],
-
-                                # Destination is the last entry (destination) for the last passenger in stops
-                                Stops[len(Stops)-1],
-
-                                # Waypoints are existing passenger destinations
-                                waypoints=Waypoint_Values,
-                                # Have to set optimize to false if not all passengers are in the car
-                                # because waypoints include origins and destinations - Can't stop at destination before origin
-                                optimize_waypoints=CanOptimizeWaypoints,
-                                mode="driving",
-                                departure_time="now")
-
-                            Current_Distance[Counter] = directions_result[0]['legs'][0]['distance']['value']
-                            Current_Duration[Counter] = directions_result[0]['legs'][0]['duration']['value']
-                        except:
-                            response.message("Made it this far, CHECKPOINT 4.25")
-
-                    ############################
-                    # Calculate Cost with Added Request
-                    ############################
-                    try:
-                        # Get directions with added passenger
+                        # Get directions with initial configuration
                         directions_result = gDirections.directions(
+
                             # Origin is the current location of the taxi
-                            str(Locations[i]),
-                            # Destination is the that of the new ride request
-                            str(Location),
-                            # Waypoints are existing passenger destinations as well as new passenger pickup location
-                            waypoints=Destination,
+                            Locations[i],
+
+                            # Destination is the last entry (destination) for the last passenger in stops
+                            Stops[len(Stops)-1],
+
+                            # Waypoints are existing passenger destinations
+                            waypoints=Waypoint_Values,
                             # Have to set optimize to false if not all passengers are in the car
                             # because waypoints include origins and destinations - Can't stop at destination before origin
                             optimize_waypoints=CanOptimizeWaypoints,
                             mode="driving",
                             departure_time="now")
-                            #gDirections = googlemaps.Client(key='AIzaSyCew8S9un1VlpuV1M1_9iJrllMTX_G_yR0')
-                    except:
-                        response.message("Issue with Directions")
-                    try:
-                        New_Distance[Counter] = directions_result[0]['legs'][0]['distance']['value']
-                        New_Duration[Counter] = directions_result[0]['legs'][0]['duration']['value']
-                    except:# IOError as err:
-                        response.message(str(Locations[i]) + " " + str(Location) + str(Stops) + str(Destination))
-                        response.message(str(New_Distance))
+
+                        Current_Distance[Counter] = directions_result[0]['legs'][0]['distance']['value']
+                        Current_Duration[Counter] = directions_result[0]['legs'][0]['duration']['value']
+
+                    ############################
+                    # Calculate Cost with Added Request
+                    ############################
+                    # Get directions with added passenger
+                    directions_result = gDirections.directions(
+                        # Origin is the current location of the taxi
+                        str(Locations[i]),
+                        # Destination is the that of the new ride request
+                        str(Location),
+                        # Waypoints are existing passenger destinations as well as new passenger pickup location
+                        waypoints=Destination,
+                        # Have to set optimize to false if not all passengers are in the car
+                        # because waypoints include origins and destinations - Can't stop at destination before origin
+                        optimize_waypoints=CanOptimizeWaypoints,
+                        mode="driving",
+                        departure_time="now")
+                    #except:
+                    #    continue;
+                        #response.message("Issue with Directions")
+                    New_Distance[Counter] = directions_result[0]['legs'][0]['distance']['value']
+                    New_Duration[Counter] = directions_result[0]['legs'][0]['duration']['value']
+                    #except:
+                        #response.message(str(Locations[i]) + " " + str(Location) + str(Stops) + str(Destination))
+                        #response.message(str(New_Distance))
                     # Calculated Incremental Distance and Duration, and select the vehicle with the lowest
                     # incremental cost to assign the new passenger
                     try:
@@ -388,14 +382,14 @@ def inbound_sms():
                 else:
                     Max_ID = MaxID_list[0][0]
                 Max_ID += 1
-                
+
                 FinalDurationMat = gDistance.distance_matrix(Taxis[DevIDs[TaxiJval]], Location)
                 FinalDurationVal = round(float(FinalDurationMat['rows'][0]['elements'][0]['duration']['value'])/60, 1)
 
                 # Match new ride request with taxi in database
                 c.execute("INSERT INTO passenger VALUES (" + str(Max_ID) + ", 0, '" + str(Location) + "', '" + str(Destination) + "'," + str(Female) + ", '" + str(Incremental_Vehicle) + "'," + str(Seating_Requested) + ")")
                 conn.commit()
-                
+
                 # Inform passenger which vehicle they will be taking and expected trip cost
                 response.message("Your vehicle is " + str(Incremental_Vehicle) + " and it will be arriving in " + str(FinalDurationVal) + " minutes. Your trip cost will be " + str(round(Trip_Price, 2)) + " Dhs")
         except:
