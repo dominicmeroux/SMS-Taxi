@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>SMS Taxi</title>
+</head>
+<!-- CSS information-->
+<style>
+    
+    ul.topnav {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: LightSteelBlue;
+    }
+    
+    ul.topnav li {float: left;}
+    
+    ul.topnav li a {
+        display: block;
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    ul.topnav li a:hover:not(.active) {background-color: LightGray;}
+
+    ul.topnav li a.active {background-color: LightPink;}
+
+    ul.topnav li.right {float: right;}
+
+    @media screen and (max-width: 600px){
+        ul.topnav li.right, 
+        ul.topnav li {float: none;}
+    }
+
+    body {
+        margin: 0;
+        background-color: Gold;
+        background-image: url('vector_background_by_leerobo.jpg');
+    }
+
+    h1 {
+        color: Black;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 45px;
+    }
+
+    h2 {
+        color: Black;
+        text-align: center; 
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 25px;
+    }
+
+    p {
+        color: Black;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+    }
+
+    .button {
+        background-color: SteelBlue;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 8px 4px;
+        cursor: pointer;
+    }
+
+    a {
+        color: Black;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+    }
+
+    ol {
+        color: Black;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+    }
+
+    div.one {
+        float: left;
+        margin: 10px;
+        padding: 15px; 
+        height: 390px;
+        max-width: 600px;
+    }
+
+    div.two {
+        float: left;
+        margin: 10px;
+        padding: 15px; 
+        height: 500px;
+        max-width: 600px;
+        background-color: LightGray;
+    }
+
+</style>
+
+<!-- HTML body with JavaScript embeded -->
+<body>
+	<ul class="topnav">
+        <li><a href="HomePage.html">Home</a></li>
+        <li><a class="active" href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/5073081865004249/3977924013403084/8394096921257885/latest.html">Fleet Management Console</a></li>
+        <li><a href="http://smstaxi.blogspot.com">Blog</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <a href="https://github.com/dominicmeroux/SMS_Taxi"><img style="position: absolute; top: 0;
+            right: 0; border: 0;"
+            src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
+            alt="Fork me on GitHub"></a>
+    </ul>
+	<h1>SMS Taxi Fleet Management Console</h1>
+
+	<div class="two">
+		<h2>Fleet Management Analytics</h2>
+		<a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/5073081865004249/3977924013403084/8394096921257885/latest.html" class="button">Dashboard</a>
+        <a href="#" class="button">Optimal Replacement</a>
+        <p>OpenXC drive trace big data analysis</p>
+		<!--
+		</br>
+		<br></br>
+		<a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/5073081865004249/3977924013403084/8394096921257885/latest.html"> Databricks Spark Notebook</a>
+		-->
+	</div>
+
+	<div class="two">
+		<h2>OpenXC Cellular Loggers</h2>
+		<!-- C5 Cellular data loggers -->
+		<a href="http://vidata1.azurewebsites.net" class="button">Manage Data Loggers</a>
+	</div>
+
+	<div class="two">
+		<h2>Current Fuel Level Percent - OpenXC Data</h2>
+		<div class="att-m2x-widget" data-widget-url="http://api-m2x.att.com/v2/widgets/ca343b5b" data-width="600" data-height="390" data-m2x-key="2342f0b6a1bd5fc4fb9a13c3766a6416"></div>
+<!-- Include the following script tag only once per page -->
+		<script src="https://m2x.att.com/widgets.js" async></script>
+	</div>
+
+	
+
+	<!-- link to Jupyter Notebook server http://jupyter-notebook.readthedocs.io/en/latest/public_server.html 
+	NOTE: https://notebooks.azure.com/n/k9nvLKcTTVg/tree
+	
+	Individual drive traces, show trips and calculate summary data 
+	<a href="PastTrips.html">View Individual Trips</a>
+	<p>View individual trips and summary data</p>
+	-->
+
+	<!-- Call dynamic programming for a specific vehicle -->
+	
+	
+</body>
+</html>
