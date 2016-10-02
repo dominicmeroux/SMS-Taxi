@@ -1,6 +1,3 @@
-# Credit https://www.fullstackpython.com/blog/respond-sms-text-messages-python-flask.html for
-# foundation code
-
 # Install packages: https://help.pythonanywhere.com/pages/InstallingNewModules
 # Web: https://www.pythonanywhere.com/user/dmeroux/webapps/#tab_id_dmeroux_pythonanywhere_com
 # Web Site: http://dmeroux.pythonanywhere.com
@@ -15,9 +12,9 @@ from m2x.client import M2XClient
 import sqlite3
 import re
 
-gDistance = googlemaps.Client(key='AIzaSyCew8S9un1VlpuV1M1_9iJrllMTX_G_yR0')
-gPlaces = googlemaps.Client(key='AIzaSyCew8S9un1VlpuV1M1_9iJrllMTX_G_yR0')
-gDirections = googlemaps.Client(key='AIzaSyCew8S9un1VlpuV1M1_9iJrllMTX_G_yR0')
+gDistance = googlemaps.Client(key='')
+gPlaces = googlemaps.Client(key='')
+gDirections = googlemaps.Client(key='')
 
 
 app = Flask(__name__)
@@ -116,8 +113,7 @@ def inbound_sms():
 
                 response.message("Thank you. We have recorded that passenger " + str(Passenger) + " has been picked up.")
 
-                # LINK FOR GOOGLE MAPS DIRECTIONS FOR DRIVER!!!
-                # EXAMPLE OF MULTIPLE WAYPOINTS
+                # Future extension could link google maps directions for the driver, e.g.
                 # https://www.google.com/maps/dir/760+W+Genesee+St+Syracuse+NY+13204/314+Avery+Ave+Syracuse+NY+13204/9090+Destiny+USA+Dr+Syracuse+NY+13204
                 # TUTORIAL: http://gearside.com/easily-link-to-locations-and-directions-using-the-new-google-maps/
                 # COULD DO THIS FOR GAS: https://www.google.com/maps/search/food/43.12345,-76.12345,14z
@@ -158,7 +154,7 @@ def inbound_sms():
             conn = sqlite3.connect('passenger.db')
             c = conn.cursor()
             try:
-                KEY = 'bf11bf82cedff6e0d7ec93f3e9db6b9a'
+                KEY = ''
                 client = M2XClient(KEY)
                 devices = client.devices()
                 json = client.last_response.json
@@ -203,18 +199,13 @@ def inbound_sms():
                     Seating = 0
                     if (SeatsOutput[0][0] != None):
                         Seating = SeatsOutput[0][0]
-                except:
-                    response.message("db existing seating not working")
-                try:
                     c.execute("SELECT passengerCapacity FROM vehicle WHERE data_loggerID = '"+DevIDs[i]+"'")
                     PassCapacity = c.fetchall()
                 except:
-                    response.message("db vehicle seats query not working")
+                    response.message("db vehicle seats query not working - please contact our support team")
                 if (((float(Pickup_Duration[i]) / 60) < 15) and (Seating + Seating_Requested < PassCapacity[0][0])):
                     # Append the index for the vehicle in Current_Status
                     J.append(i)
-                #except:
-                #    response.message(str(i))
 
             # If no vehicles met the requirement for proximity to pickup location
             if len(J) == 0:
@@ -333,14 +324,10 @@ def inbound_sms():
                         optimize_waypoints=CanOptimizeWaypoints,
                         mode="driving",
                         departure_time="now")
-                    #except:
-                    #    continue;
-                        #response.message("Issue with Directions")
+
                     New_Distance[Counter] = directions_result[0]['legs'][0]['distance']['value']
                     New_Duration[Counter] = directions_result[0]['legs'][0]['duration']['value']
-                    #except:
-                        #response.message(str(Locations[i]) + " " + str(Location) + str(Stops) + str(Destination))
-                        #response.message(str(New_Distance))
+
                     # Calculated Incremental Distance and Duration, and select the vehicle with the lowest
                     # incremental cost to assign the new passenger
                     try:
