@@ -6,6 +6,8 @@ The web app can be accessed at http://dmeroux.pythonanywhere.com.
 
 The competition web page is located at http://code4cabs.devpost.com. 
 
+Feel free to reach out to me at dmeroux@gmail.com with suggestions, comments, or questions! 
+
 # Web App
 
 The Python Flask web app receives on-demand ride requests via text message through Twillio and matches these requests with vehicles using an insertion heuristic. In this approach, the algorithm determines whether there are any taxis within an acceptable driving time from the pickup location and with adequate seating capacity. Of the taxis meeting these criteria, the ride request is added to the taxi where the cumulative trip operational cost of taking on these additional passenger(s) is lowest. Users with similar origins and destinations are more likely to be paired, and taxis with a more fuel efficient driving record as indicated by OpenXC data are more likely to get rides because they have a lower operating cost per kilometer. 
