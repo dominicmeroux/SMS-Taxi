@@ -73,7 +73,7 @@ def inbound_sms():
 
         try:
             # Obtain taxi's last reported location from M2X
-            KEY = 'bf11bf82cedff6e0d7ec93f3e9db6b9a'
+            KEY = ''
             client = M2XClient(KEY)
             client.devices()
             json = client.last_response.json
@@ -354,7 +354,8 @@ def inbound_sms():
                             Gender_Cost = GenderCost(Gender, Seating_Requested, Female)
                             Incremental_Vehicle = VehicleInfo[0][2]
                             Trip_Price = OpCost(Incremental_Distance, VehicleInfo[0][0], fuel_price)*Profit_Margin
-                            TaxiJval = Counter
+                            #TaxiJval = Counter
+                            TaxiJval = i
                     except:
                         TaxiJval = 0
                         response.message("If statement issue" + "Counter" + str(Counter) + "DevID" + str(DevIDs[Counter]))
