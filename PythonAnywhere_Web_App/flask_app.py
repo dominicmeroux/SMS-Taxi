@@ -140,9 +140,9 @@ def inbound_sms():
             Location = M[0]
             Destination = M[1]
             Seating_Requested = int(M[2])
-            if (re.search(r'F', M[3])):
+            if (re.search(r'F|f', M[3])):
                 Gender = 0
-            elif (re.search(r'M', M[3])):
+            elif (re.search(r'M|m', M[3])):
                 Gender = 1
             else:
                 response.message("Please re-send gender value as M or F. Gender found was" + str(M[3]))
@@ -358,7 +358,6 @@ def inbound_sms():
                             TaxiJval = i
                     except:
                         TaxiJval = 0
-                        response.message("If statement issue" + "Counter" + str(Counter) + "DevID" + str(DevIDs[Counter]))
                     Counter += 1
 
 
