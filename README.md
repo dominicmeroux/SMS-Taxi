@@ -2,9 +2,10 @@
 
 I am a graduate student at the UC Davis Institute of Transportation Studies. This repository represents my solution for the 2016 Ford Code for Taxicabs Mobility Challenge. My solution, called SMS taxi, receives ride requests via text message; matches passengers with taxis using OpenXC with AT&T’s iOT platforms Flow and M2X; and uses Spark on Databricks to analyze cumulative OpenXC data to inform the ride-matching algorithm’s fuel cost function, allow taxi fleet management to understand cost performance metrics, and use a data-driven strategy to provide customers with the most cost-efficient taxis. 
 
-The web app can be accessed at http://dmeroux.pythonanywhere.com. 
-
 The competition web page is located at http://code4cabs.devpost.com. 
+
+The web app can be accessed at http://dmeroux.pythonanywhere.com. 
+### NOTE: I've pointed Twilio to another project I'm working on, but if you would be interested in seeing SMS Taxi work, I can easily modify my Twilio account. 
 
 Feel free to reach out to me at dmeroux@gmail.com with suggestions, comments, or questions! 
 
